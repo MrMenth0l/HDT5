@@ -36,3 +36,20 @@ def proceso(env, nombre, ram, cpu, tiempo_llegada):
         ram.put(memoria_requerida)
         tiempos_totales.append(env.now - llegada)
 
+
+def ejecutar_simulacion(intervalo, num_procesos):
+    global tiempos_totales
+    tiempos_totales = []
+    env = simpy.Environment()
+    ram = simpy.Container(env, init=RAM_CAPACIDAD, capacity=RAM_CAPACIDAD)
+    cpu = simpy.Resource(env, capacity=NUM_CPUS)
+
+    random.seed(RANDOM_SEED)
+
+    for i in range(num_procesos):
+        env.process(proceso(env, f"Proceso-{i}", ram, cpu, env.now))
+        yield env.timeout(random.expovariate(1.0 / intervalo))
+
+    env.run()
+
+
