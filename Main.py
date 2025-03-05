@@ -51,5 +51,7 @@ def ejecutar_simulacion(intervalo, num_procesos):
         yield env.timeout(random.expovariate(1.0 / intervalo))
 
     env.run()
+return np.mean(tiempos_totales), np.std(tiempos_totales)
+
 
 
