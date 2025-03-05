@@ -53,5 +53,25 @@ def ejecutar_simulacion(intervalo, num_procesos):
     env.run()
 return np.mean(tiempos_totales), np.std(tiempos_totales)
 
+#simulaciones 
+resultados = {}
+
+for intervalo in INTERVALOS:
+    resultados[intervalo] = {"medias": [], "desviaciones": []}
+    for num_procesos in NUM_PROCESOS:
+        media, desviacion = ejecutar_simulacion(intervalo, num_procesos)
+        resultados[intervalo]["medias"].append(media)
+        resultados[intervalo]["desviaciones"].append(desviacion)
+
+# Generar gráficas
+for intervalo in INTERVALOS:
+    plt.figure()
+    plt.errorbar(NUM_PROCESOS, resultados[intervalo]["medias"], yerr=resultados[intervalo]["desviaciones"], fmt='-o', capsize=5)
+    plt.xlabel("Número de Procesos")
+    plt.ylabel("Tiempo Promedio en el Sistema")
+    plt.title(f"Simulación con Intervalo de Llegada = {intervalo}")
+    plt.grid(True)
+    plt.show()
+
 
 
